@@ -4,8 +4,6 @@ from django.http import HttpResponse
 from .models import Note
 from .forms import NoteForm
 
-# Create your views here.
-
 def index(request):
 	notes = Note.objects.all().order_by('-date_created')
 
@@ -44,3 +42,17 @@ def delete_note(request, pk):
 
 	context = {'note':note}
 	return render(request, 'notes/delete_note.html', context)
+
+def search_note(request):
+	if request.method == "POST":
+		form=NoteForm(request.POST)
+		if form.is_valid():
+			searched=form.cleaned_data["text"]
+			notes = Note.objects.filter(text__contains=searched)	
+
+	else:
+		notes = Note.objects.all().order_by('-date_created')
+		form=NoteForm()
+		
+	return render(request, 'notes/search_note.html', {"form": form, "notes": notes})
+

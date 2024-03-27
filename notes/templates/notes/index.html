@@ -3,8 +3,11 @@
 {% block content %}
 
 <div class="container">
-    <h1>Notes App <small class="text-muted">Listing View</small></h1>
+    <h1><small class="text-muted">Listing View</small></h1>
+    <a class="btn btn-sm btn-primary" href="{% url 'search_note' %}">Search for Notes</a>
+
 </div>
+
 
 
 <div class="container">
@@ -25,7 +28,7 @@
                     <th>{{ form.text }}</th>
                     <th>{{ form.type }}</th>
                     <th></th>
-                    <th><input class="btn btn-sm btn-success" value="Add" type="submit" name="Create Note"></th>
+                    <th><input class="btn btn-sm btn-primary" value="Add" type="submit" name="Create Note"></th>
                     <th></th>
                 </tr>
             </form>
@@ -38,7 +41,7 @@
                 <td>{{ note.date_created }}</td>
                 <td>
 
-                    <a class="btn btn-sm btn-primary" href="{% url 'update_note' note.id %}">Update</a>
+                    <a class="btn btn-sm btn-success" href="{% url 'update_note' note.id %}">Update</a>
 
                 </td>
                 <td>
