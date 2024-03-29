@@ -5,6 +5,7 @@
 <div class="container">
     <h1><small class="text-muted">Listing View</small></h1>
     <a class="btn btn-sm btn-primary" href="{% url 'search_note' %}">Search for Notes</a>
+    <a class="btn btn-sm btn-primary" href="{% url 'create_note' %}">Create a Note</a>
 
 </div>
 
@@ -21,17 +22,30 @@
                 <th></th>
                 <th></th>
             </tr>
+            <tr>
+                <td>
+                    {% if searched %}
+                        <h4>You searched for <span style="color: blue;">{{ searched}}</span></h4> 
+                    {% else %}
+                    {% endif %}    
+                </td>
+            </tr>
 
-            <form method="POST" action="/">
+            <form class="form-control me-2" type="search" method="POST" name="search_text" placeholder="Search notes..." action="{% url 'search_note' %}">
                 {% csrf_token %}
                 <tr>
                     <th>{{ form.text }}</th>
                     <th>{{ form.type }}</th>
                     <th></th>
-                    <th><input class="btn btn-sm btn-primary" value="Add" type="submit" name="Create Note"></th>
-                    <th></th>
-                </tr>
+                    <th><button class="btn btn-sm btn-outline-primary d-block" type="submit">Search</button> </th>
             </form>
+            <form>
+                    <form class="form-control me-2" method="GET" action="{% url 'search_note' %}">
+                    <th><button class="btn btn-sm btn-outline-primary d-block" type="submit">View All</button> </th>
+            </form>
+                    
+                </tr>
+
         </thead>
         <tbody>
             {% for note in notes %}
@@ -41,11 +55,11 @@
                 <td>{{ note.date_created }}</td>
                 <td>
 
-                    <a class="btn btn-sm btn-success" href="{% url 'update_note' note.id %}">Update</a>
+                    <a class="btn btn-sm btn-outline-success" href="{% url 'update_note' note.id %}">Update</a>
 
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-danger" href="{% url 'delete_note' note.id %}">Delete</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'delete_note' note.id %}">Delete</a>
                 </td>
             </tr>
             {% endfor %}
