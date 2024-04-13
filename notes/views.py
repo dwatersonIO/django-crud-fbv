@@ -2,22 +2,28 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Note
-from .forms import NoteForm
+from .forms import NoteForm, SearchForm
 
 def index(request):
-	notes = Note.objects.all().order_by('-date_created')
+	notes = Note.objects.all().order_by('-date_created') # order_by not needed since order in Model Meta field
 
-	form = NoteForm()
+	context = {'notes':notes}
+	return render(request, 'notes/index.html', context)
 
-	if request.method =='POST':
-		form = NoteForm(request.POST)
+
+def detail_note(request, pk):
+	note = Note.objects.get(id=pk)
+
+	if request.method == 'POST':
+		form = NoteForm(request.POST, instance=note)
 		if form.is_valid():
 			form.save()
-		return redirect('/')
+			return redirect('/')
+	else:
+		form = NoteForm() # GET Request returns empty form
 
-
-	context = {'notes':notes, 'form':form}
-	return render(request, 'notes/index.html', context)
+	context = {'note': note, 'form':form}
+	return render(request, 'notes/detail_note.html', context)
 
 def create_note(request):
 
@@ -25,6 +31,7 @@ def create_note(request):
 
 	if request.method =='POST':
 		form = NoteForm(request.POST)
+		print (form)
 		if form.is_valid():
 			form.save()
 		return redirect('/')
@@ -41,7 +48,7 @@ def update_note(request, pk):
 			form.save()
 			return redirect('/')
 	else:
-		form = NoteForm() # GET Request returns empty form
+		form = NoteForm(instance=note) # if Get request just show current data
 
 	context = {'form':form}
 	return render(request, 'notes/update_note.html', context)
@@ -58,17 +65,37 @@ def delete_note(request, pk):
 
 def search_note(request):
 	if request.method == "POST":
-		form=NoteForm(request.POST)
+		form=SearchForm(request.POST)
 		if form.is_valid():
-			searched=form.cleaned_data["text"]
-			notes = Note.objects.filter(text__contains=searched)
-			form=NoteForm()	
+			searched=form.cleaned_data["search_summary"]
+			notes = Note.objects.filter(summary__contains=searched)
+			form=SearchForm()	
 
 	else:
 		notes = Note.objects.all().order_by('-date_created')
-		form=NoteForm()
+		form=SearchForm()
+		# form.fields['tags'].required = False  # Set tags field as optional for search view
+		# form.fields['text'].required = False  # Set tags field as optional for search view
 		searched=""
 
 
-	return render(request, 'notes/index.html', {"form": form, "notes": notes, "searched": searched})
+	return render(request, 'notes/search_note.html', {"form": form, "notes": notes, "searched": searched})
+
+# def search_note(request):
+# 	if request.method == "POST":
+# 		form=NoteForm(request.POST)
+# 		if form.is_valid():
+# 			searched=form.cleaned_data["summary"]
+# 			notes = Note.objects.filter(summary__contains=searched)
+# 			form=NoteForm()	
+
+# 	else:
+# 		notes = Note.objects.all().order_by('-date_created')
+# 		form=NoteForm()
+# 		# form.fields['tags'].required = False  # Set tags field as optional for search view
+# 		# form.fields['text'].required = False  # Set tags field as optional for search view
+# 		searched=""
+
+
+# 	return render(request, 'notes/search_note.html', {"form": form, "notes": notes, "searched": searched})
 

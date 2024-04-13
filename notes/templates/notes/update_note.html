@@ -10,8 +10,9 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Summary</th>
                 <th>Text</th>
-                <th>Type</th>
+                <th>Tags</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -20,8 +21,9 @@
             <tr>
                 <form method="POST" action="">
                     {% csrf_token %}
+                    <td>{{ form.summary}}</td>
                     <td>{{ form.text}}</td>
-                    <td>{{ form.type}}</td>
+                    <td>{{ form.tags}}</td>
                     <td>
                         <input class="btn btn-sm btn-success" type="submit" value="Save Changes" name="Update Note">
                     </td>

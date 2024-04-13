@@ -13,17 +13,19 @@
         <thead>
 
             <tr>
+                <th>Summary</th>
                 <th>Text</th>
-                <th>Type</th>
+                <th>Tags</th>
                 <th></th>
                 <th></th>
             </tr>
 
-            <form method="POST" action="/">
+            <form method="POST" action="">
                 {% csrf_token %}
                 <tr>
+                    <th>{{ form.summary }}</th>
                     <th>{{ form.text }}</th>
-                    <th>{{ form.type }}</th>
+                    <th>{{ form.tags }}</th>
                     <th></th>
                     <th><input class="btn btn-sm btn-primary" value="Add" type="submit" name="Create Note"></th>
                     <th></th>

@@ -5,4 +5,11 @@ from notes.models import Note
 class NoteForm(ModelForm):
     class Meta:
         model = Note
-        fields = ['text','tags']
+        fields = ['summary','text','tags']
+
+
+class SearchForm(forms.Form):
+    search_summary = forms.CharField(label="Search for...", max_length=128)
+    
+
+

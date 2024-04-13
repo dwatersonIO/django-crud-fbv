@@ -10,9 +10,9 @@ class Tag(models.Model):
         return self.tag
     
 class Note(models.Model):
-    summary=models.CharField(max_length=128, default="Summary")
+    summary=models.CharField(max_length=128)
     text=models.CharField(max_length=255)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     date_created = models.DateTimeField(auto_now=True)
 
     class Meta:
