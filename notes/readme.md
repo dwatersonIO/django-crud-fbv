@@ -1,2 +1,5 @@
 # To Do
--  Add Add view template and view logic
+-  Rewatch Htmx videos to review the basics
+-  Modify the search_note template so uses a GET request
+-  Already adjusted the view so that  only accepting HTMX.Requests.
+

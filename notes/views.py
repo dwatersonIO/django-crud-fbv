@@ -64,8 +64,10 @@ def delete_note(request, pk):
 	return render(request, 'notes/delete_note.html', context)
 
 def search_note(request):
-	if request.method == "POST":
+	if request.htmx:
+
 		form=SearchForm(request.POST)
+		
 		if form.is_valid():
 			searched=form.cleaned_data["search_summary"]
 			notes = Note.objects.filter(summary__contains=searched)
