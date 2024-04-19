@@ -10,10 +10,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Summary</th>
+                <th>Summary</th>`
+                <th>Text</th>
                 <th>Tags</th>
                 <th>Date Created</th>
-                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -22,13 +22,13 @@
             {% for note in notes %}
             <tr>
                 <td><a href="{% url 'detail_note' note.id %}"> {{ note.summary }} </a></td>
+                <td>{{ note.text }}</td>
                 <td>
                     {% for tag in note.tags.all %}
                         {{ tag }}
                     {% endfor %}
                 </td>
                 <td>{{ note.date_created | date:"M j, Y"}}</td>
-
             </tr>
             {% endfor %}
 

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .models import Note
-from .forms import NoteForm, SearchForm
+from .models import Note, Tag
+from .forms import NoteForm, NoteSearchForm
 
 def index(request):
 	notes = Note.objects.all().order_by('-date_created') # order_by not needed since order in Model Meta field
@@ -28,7 +28,7 @@ def detail_note(request, pk):
 def create_note(request):
 
 	form = NoteForm()
-
+	tags = Tag.objects.all()
 	if request.method =='POST':
 		form = NoteForm(request.POST)
 		print (form)
@@ -36,7 +36,7 @@ def create_note(request):
 			form.save()
 		return redirect('/')
 
-	context = {'form':form}
+	context = {'form':form,'tags':tags}
 	return render(request, 'notes/create_note.html', context)
 
 def update_note(request, pk):
@@ -63,41 +63,39 @@ def delete_note(request, pk):
 	context = {'note':note}
 	return render(request, 'notes/delete_note.html', context)
 
-def search_note(request):
-	if request.htmx:
 
-		form=SearchForm(request.POST)
+
+def search_note(request):
+	if request.method == 'POST':
+
+		form=NoteSearchForm(request.POST)
 		
 		if form.is_valid():
-			searched=form.cleaned_data["search_summary"]
-			notes = Note.objects.filter(summary__contains=searched)
-			form=SearchForm()	
+			summary=form.cleaned_data["summary"]
+			text = form.cleaned_data["text"]
+			tags = form.cleaned_data["tags"]
+
+		# Start with an empty queryset
+		notes = Note.objects.all()
+
+		# Filter based on submitted data
+		if summary:
+			notes = notes.filter(summary__icontains=summary)
+		if text:
+			notes = notes.filter(text__icontains=text)
+		if tags:
+			notes = notes.filter(tags__in=tags)
+			
+			
+
+		form=NoteSearchForm()	
 
 	else:
 		notes = Note.objects.all().order_by('-date_created')
-		form=SearchForm()
-		# form.fields['tags'].required = False  # Set tags field as optional for search view
-		# form.fields['text'].required = False  # Set tags field as optional for search view
-		searched=""
+		form=NoteSearchForm()
+		
+
+	return render(request, 'notes/search_note.html', {"form": form, "notes": notes})
 
 
-	return render(request, 'notes/search_note.html', {"form": form, "notes": notes, "searched": searched})
-
-# def search_note(request):
-# 	if request.method == "POST":
-# 		form=NoteForm(request.POST)
-# 		if form.is_valid():
-# 			searched=form.cleaned_data["summary"]
-# 			notes = Note.objects.filter(summary__contains=searched)
-# 			form=NoteForm()	
-
-# 	else:
-# 		notes = Note.objects.all().order_by('-date_created')
-# 		form=NoteForm()
-# 		# form.fields['tags'].required = False  # Set tags field as optional for search view
-# 		# form.fields['text'].required = False  # Set tags field as optional for search view
-# 		searched=""
-
-
-# 	return render(request, 'notes/search_note.html', {"form": form, "notes": notes, "searched": searched})
 

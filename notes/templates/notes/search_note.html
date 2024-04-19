@@ -13,8 +13,21 @@
 
             <form class="d-flex" method="post" name="search_text" action="{% url 'search_note' %}">
                 {% csrf_token %}
+
                 <tr>
-                    <td>{{ form }}</td>
+                    <th>Summary</th>
+                    <th>Text</th>
+                    <th>Tags</th>
+                    <th>Date Created</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+
+                <tr>
+                    <td>{{ form.summary }}</td>
+                    <td>{{ form.text }}</td>
+                    <td>{{ form.tags }}</td>
+                    <td> BLANK</td>
                     <td><button class="btn btn-outline-secondary" placeholder="Search notes..." type="submit">Search</button> </td>
                     <td>
                         {% if searched %}
@@ -23,11 +36,7 @@
                         {% endif %}    
                     </td>
                 </tr>
-                  
-                    <!-- <th>{{ form.type }}</th> -->
-                    
-                    <!-- <th><a class="btn btn-sm btn-primary" href="{% url 'search_note' %}">Search</a></th> -->
-                    <!-- <th><a class="btn btn-sm btn-primary" href="{% url 'search_note' %}">Search</a></th> -->
+
             </form>
         </thead>
         <tbody>
@@ -42,7 +51,7 @@
                             {{ tag }}
                         {% endfor %}
                     </td>
-                    <td>{{ note.date_created }}</td>
+                    <td>{{ note.date_created | date:"M j, Y" }}</td>
                 </tr>
              {% endfor %}
 
