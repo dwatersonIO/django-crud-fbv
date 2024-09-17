@@ -10,14 +10,26 @@ class NoteForm(ModelForm):
             'tags': forms.CheckboxSelectMultiple
         }
 
+
 class NoteSearchForm(forms.Form):
+
+    '''
+    Separate form for searching so can make search fields optional wheres in NoteForm used for entry they are required
+    If  want to change widget could adjust tags as follows:
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+    '''
+
     summary = forms.CharField(required=False)
     text = forms.CharField(required=False)
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)      
+    # tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)      
+
+class TagForm(ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['tag']
 
 
-# class SearchForm(forms.Form):
-#     search_summary = forms.CharField(label="Search for...", max_length=128)
     
 
 

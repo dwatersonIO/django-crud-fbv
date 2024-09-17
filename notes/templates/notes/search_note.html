@@ -9,38 +9,36 @@
 
 <div class="container">
     <table class="table">
-        <thead>
+    <thead>
+        <tr>
+            <th>Summary</th>
+            <th>Text</th>
+            <th>Date Created</th>
+            <th>Tags</th>
+            <th>BLANK HEADING</th>
+        </tr>
+    
+    <form class="d-flex" method="post" name="search_text" action="{% url 'search_note' %}">  
+    {% csrf_token %}
+    
+    <tr>
+        <td>Summary: {{ form.summary }}</td>
+        <td>Text: {{ form.text }}</td>
 
-            <form class="d-flex" method="post" name="search_text" action="{% url 'search_note' %}">
-                {% csrf_token %}
-
-                <tr>
-                    <th>Summary</th>
-                    <th>Text</th>
-                    <th>Tags</th>
-                    <th>Date Created</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-
-                <tr>
-                    <td>{{ form.summary }}</td>
-                    <td>{{ form.text }}</td>
-                    <td>{{ form.tags }}</td>
-                    <td> BLANK</td>
-                    <td><button class="btn btn-outline-secondary" placeholder="Search notes..." type="submit">Search</button> </td>
-                    <td>
-                        {% if searched %}
-                            <h4>You searched for <span style="color: blue;">{{ searched}}</span></h4> 
-                        {% else %}
-                        {% endif %}    
-                    </td>
-                </tr>
-
-            </form>
-        </thead>
-        <tbody>
- 
+        <td>Date Created</td>
+        <td>
+            {% for checkbox in form.tags %}
+            <label> {{ checkbox }}</label>
+            {% endfor %}
+        </td>
+        <td>
+            <button class="btn btn-outline-secondary" placeholder="" type="submit">Search.</button>
+        </td>
+    </tr>
+    
+</form>
+</thead>
+        
             {% include 'notes\partial_search_results.html' %}
             {% for note in notes %}
                 <tr id="search_results">

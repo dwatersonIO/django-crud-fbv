@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Note, Tag
-from .forms import NoteForm, NoteSearchForm
+from .forms import NoteForm, NoteSearchForm, TagForm
 
 def index(request):
-	notes = Note.objects.all().order_by('-date_created') # order_by not needed since order in Model Meta field
-
+	notes = Note.objects.prefetch_related("tags").order_by('-date_created') # order_by not needed since order in Model Meta field
+	# Better than Note.objects.all() since avoids n+1 problem. ie template issuing multiple sql queries to find the many-to-many queries
+	# If the relationship is one to many then use "select_related." "prefetch_related" used on many to many relationships.
+ 
+ 
 	context = {'notes':notes}
 	return render(request, 'notes/index.html', context)
 
@@ -86,16 +89,26 @@ def search_note(request):
 		if tags:
 			notes = notes.filter(tags__in=tags)
 			
-			
-
 		form=NoteSearchForm()	
 
 	else:
 		notes = Note.objects.all().order_by('-date_created')
 		form=NoteSearchForm()
 		
-
 	return render(request, 'notes/search_note.html', {"form": form, "notes": notes})
 
+def create_tag(request):
 
+	form = TagForm()
+	tags = Tag.objects.all()
+	
+	if request.method =='POST':
+		form = TagForm(request.POST)
+		
+		if form.is_valid():
+			form.save()
+		return redirect('/')
+
+	context = {'form':form,'tags':tags}
+	return render(request, 'notes/create_tag.html', context)
 

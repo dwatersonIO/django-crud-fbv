@@ -8,4 +8,5 @@ urlpatterns = [
 	path('update_note/<str:pk>/', views.update_note, name="update_note"),
     path('search_note/', views.search_note, name="search_note"),
 	path('delete/<str:pk>/', views.delete_note, name="delete_note"),
+    path('create_tag/', views.create_tag, name="create_tag"),
 ]
