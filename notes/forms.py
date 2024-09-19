@@ -18,11 +18,9 @@ class NoteSearchForm(forms.Form):
     If  want to change widget could adjust tags as follows:
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
     '''
-
-    summary = forms.CharField(required=False)
-    text = forms.CharField(required=False)
+    search_text = forms.CharField(required=False)
     # tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)      
+    search_tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)      
 
 class TagForm(ModelForm):
     class Meta:

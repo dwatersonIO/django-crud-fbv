@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.db.models import Q
 
 from .models import Note, Tag
 from .forms import NoteForm, NoteSearchForm, TagForm
@@ -74,28 +75,31 @@ def search_note(request):
 		form=NoteSearchForm(request.POST)
 		
 		if form.is_valid():
-			summary=form.cleaned_data["summary"]
-			text = form.cleaned_data["text"]
-			tags = form.cleaned_data["tags"]
-
-		# Start with an empty queryset
-		notes = Note.objects.all()
-
-		# Filter based on submitted data
-		if summary:
-			notes = notes.filter(summary__icontains=summary)
-		if text:
-			notes = notes.filter(text__icontains=text)
-		if tags:
-			notes = notes.filter(tags__in=tags)
+			search_text = form.cleaned_data["search_text"]
+			search_tags = form.cleaned_data["search_tags"]  # Need to add functionality to search tags
 			
-		form=NoteSearchForm()	
+		if search_text:
+			notes = Note.objects.filter(summary__icontains=search_text) | Note.objects.filter(text__icontains=search_text) 
+			search_text=''
+			form=NoteSearchForm()	
+		else:
+			notes = Note.objects.all().order_by('-date_created')
+			form=NoteSearchForm()
 
-	else:
-		notes = Note.objects.all().order_by('-date_created')
-		form=NoteSearchForm()
+
+
+		# if summary:
+		# 	notes = notes.filter(summary__icontains=summary)
+		# if text:
+		# 	notes = notes.filter(text__icontains=text)
+		# if tags:
+		# 	notes = notes.filter(tags__in=tags)
+			
 		
-	return render(request, 'notes/search_note.html', {"form": form, "notes": notes})
+
+
+		
+	return render(request, 'notes/search_note.html', {"search_text": search_text, "form": form, "notes": notes})
 
 def create_tag(request):
 

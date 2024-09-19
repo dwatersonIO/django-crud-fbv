@@ -11,26 +11,27 @@
     <table class="table">
     <thead>
         <tr>
-            <th>Summary</th>
-            <th>Text</th>
-            <th>Date Created</th>
+            <th>Search Text</th>
             <th>Tags</th>
-            <th>BLANK HEADING</th>
+            <th>Date Created</th>
+            <th>
+                
+            </th>
         </tr>
     
     <form class="d-flex" method="post" name="search_text" action="{% url 'search_note' %}">  
     {% csrf_token %}
     
     <tr>
-        <td>Summary: {{ form.summary }}</td>
-        <td>Text: {{ form.text }}</td>
-
-        <td>Date Created</td>
+        <td>{{ form.search_text }}</td>
         <td>
-            {% for checkbox in form.tags %}
-            <label> {{ checkbox }}</label>
+            {% for checkbox in form.search_tags %}
+             <label> {{ checkbox }}</label>
             {% endfor %}
         </td>
+
+        <td>[Date]</td>
+
         <td>
             <button class="btn btn-outline-secondary" placeholder="" type="submit">Search.</button>
         </td>
@@ -59,3 +60,4 @@
 </div>
 
 {% endblock content %}
+
