@@ -70,36 +70,55 @@ def delete_note(request, pk):
 
 
 def search_note(request):
-	if request.method == 'POST':
+    # Always use GET for search forms
+    form = NoteSearchForm(request.GET or None)
+    notes = Note.objects.all()  # Start with all notes
+    
+    if form.is_valid():
+        # Get the search text and tags from the form
+        search_text = form.cleaned_data.get('search_text')
+        search_tags = form.cleaned_data.get('search_tags')
+        
+        # Filter notes by search_text if provided
+        if search_text:
+            notes = notes.filter(Q(text__icontains=search_text) | Q(summary__icontains=search_text))
+        
+        # Filter notes by tags if tags are provided
+        if search_tags:
+            notes = notes.filter(tags__in=search_tags).distinct()
 
-		form=NoteSearchForm(request.POST)
+    else:
+        notes = Note.objects.all().order_by('-date_created')
+
+    context = {
+        'form': form,
+        'notes': notes,
+    }
+
+    return render(request, 'notes/search_note.html', context)
+
+	# if request.method == 'POST':
+
+	# 	form=NoteSearchForm(request.POST)
 		
-		if form.is_valid():
-			search_text = form.cleaned_data["search_text"]
-			search_tags = form.cleaned_data["search_tags"]  # Need to add functionality to search tags
-			
-		if search_text:
-			notes = Note.objects.filter(summary__icontains=search_text) | Note.objects.filter(text__icontains=search_text) 
-			search_text=''
-			form=NoteSearchForm()	
-		else:
-			notes = Note.objects.all().order_by('-date_created')
-			form=NoteSearchForm()
+	# 	if form.is_valid():
+	# 		search_text = form.cleaned_data["search_text"]
+	# 		search_tags = form.cleaned_data["search_tags"]  # Need to add functionality to search tags
 
+	# 	if search_text:
+	# 		notes = notes.filter(text__icontains=search_text) # Need to also search on summary.
+	# 	else:
+	# 		notes = Note.objects.all().order_by('-date_created')
 
+	# 	if search_tags:
+	# 		notes = notes.filter(tags__in=search_tags)  # This needs to search for each tag selected.
 
-		# if summary:
-		# 	notes = notes.filter(summary__icontains=summary)
-		# if text:
-		# 	notes = notes.filter(text__icontains=text)
-		# if tags:
-		# 	notes = notes.filter(tags__in=tags)
-			
-		
+	# else:
+	# 	notes = Note.objects.all().order_by('-date_created')
+	# 	form=NoteSearchForm()
+	# 	search_text=""
 
-
-		
-	return render(request, 'notes/search_note.html', {"search_text": search_text, "form": form, "notes": notes})
+	# return render(request, 'notes/search_note.html', {"search_text": search_text, "form": form, "notes": notes})
 
 def create_tag(request):
 

@@ -19,7 +19,7 @@
             </th>
         </tr>
     
-    <form class="d-flex" method="post" name="search_text" action="{% url 'search_note' %}">  
+    <form class="d-flex" method="get" name="search_text" action="{% url 'search_note' %}">  
     {% csrf_token %}
     
     <tr>
