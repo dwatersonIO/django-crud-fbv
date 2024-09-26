@@ -1,0 +1,39 @@
+{% extends "notes/base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1><small class="text-muted">HTMX Search View</small></h1>
+ </div>
+
+
+<div class="container">
+
+   
+<form class="d-flex" method="get"
+    name="search_text"
+    hx-get="{% url 'h_search_note' %}"
+    hx-trigger="keyup delay:500ms"
+    hx-target="#results">  
+
+    {{ form.search_text }}
+        
+            <button class="btn btn-outline-secondary" placeholder="" type="submit">Search.</button>
+    </form>
+    
+    <div id="results">
+        {% include 'notes\h_partial_search_note.html' %}
+    </div>
+
+</div>
+<style>
+
+    #results {
+        background-color: yellow;
+        color: red;
+    }
+    
+    </style>
+    
+{% endblock content %}
+

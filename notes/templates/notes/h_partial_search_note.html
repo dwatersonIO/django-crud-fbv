@@ -1,0 +1,18 @@
+{% for note in notes %}
+<p>{{ note.summary }}, {{ note.text }}
+    {% for tag in note.tags.all %}
+    {{ tag }}
+    {% endfor %}
+    {{ note.date_created | date:"M j, Y" }}
+    
+</p>
+{% endfor %}   
+
+
+
+<style>
+
+p {
+color:blue
+    }
+</style>

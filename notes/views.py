@@ -94,31 +94,8 @@ def search_note(request):
         'form': form,
         'notes': notes,
     }
-
     return render(request, 'notes/search_note.html', context)
 
-	# if request.method == 'POST':
-
-	# 	form=NoteSearchForm(request.POST)
-		
-	# 	if form.is_valid():
-	# 		search_text = form.cleaned_data["search_text"]
-	# 		search_tags = form.cleaned_data["search_tags"]  # Need to add functionality to search tags
-
-	# 	if search_text:
-	# 		notes = notes.filter(text__icontains=search_text) # Need to also search on summary.
-	# 	else:
-	# 		notes = Note.objects.all().order_by('-date_created')
-
-	# 	if search_tags:
-	# 		notes = notes.filter(tags__in=search_tags)  # This needs to search for each tag selected.
-
-	# else:
-	# 	notes = Note.objects.all().order_by('-date_created')
-	# 	form=NoteSearchForm()
-	# 	search_text=""
-
-	# return render(request, 'notes/search_note.html', {"search_text": search_text, "form": form, "notes": notes})
 
 def create_tag(request):
 
@@ -135,3 +112,39 @@ def create_tag(request):
 	context = {'form':form,'tags':tags}
 	return render(request, 'notes/create_tag.html', context)
 
+
+def h_search_note(request): 
+
+	# HTMX Search request
+	print (request.htmx)
+
+	# Always use GET for search forms
+	form = NoteSearchForm(request.GET or None)
+	notes = Note.objects.all()  # Start with all notes
+	
+	if request.htmx:
+
+		if form.is_valid():
+			# Get the search text and tags from the form
+			search_text = form.cleaned_data.get('search_text')
+
+			
+			# Filter notes by search_text if provided
+			if search_text:
+				notes = notes.filter(Q(text__icontains=search_text) | Q(summary__icontains=search_text))
+
+			
+	else:
+		notes = Note.objects.all().order_by('-date_created')
+		
+
+	context = {
+	'form': form,
+	'notes': notes,
+}
+	if request.htmx:
+		return render(request, 'notes\h_partial_search_note.html', context)
+	else:
+		return render(request, 'notes\h_search_note.html', context)
+
+	
