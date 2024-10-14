@@ -1,18 +1,26 @@
+
+<div class="row column-gap-2 row-gap-2 bg-warning">
 {% for note in notes %}
-<p>{{ note.summary }}, {{ note.text }}
-    {% for tag in note.tags.all %}
-    {{ tag }}
-    {% endfor %}
-    {{ note.date_created | date:"M j, Y" }}
+        <div class="col-4 p-3 testborder">
+            Summary: {{ note.summary }}
+            <br> 
+            Text: {{ note.text }}
+            <br>
+            Date: {{ note.date_created | date:"M j, Y" }}
+            <br>
+            {% for tag in note.tags.all %}
+                {{ tag }}
+            {% endfor %}
+        </div>        
+{% endfor %}  
+</div>
+
+
     
-</p>
-{% endfor %}   
-
-
-
 <style>
 
-p {
-color:blue
-    }
+.testborder {
+    border: 2px solid red;
+}
+
 </style>
