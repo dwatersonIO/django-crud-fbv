@@ -1,2 +1,2 @@
-# Basic Django CRUD function-based view with HTMX  
+# Basic Django CRUD app with FBvs and HTMX  
 This Notes is a basic Django app with file-baased viewss plus htmx to demostrate how to provide a smoother user experience by avoiding full-page refreshings. With HTMX one can produce similar functionality to a SPA without the added overhead of serving and API and using a Javascript framework. For HTMX I used the django-htmx package which extends the Request object allowing the View to determine if the request was a regular request or a HTMX request.
