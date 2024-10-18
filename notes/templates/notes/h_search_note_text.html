@@ -7,28 +7,18 @@
  </div>
 
  <div class="container">
-<h4>Description</h4>
-<p>This view allows you to select a tag for a dynamic search using HTMX. Clicking on a tag will return a search for notes with that particular tag. Selecting multiple tags will select all notes with ANY of those tags</p>
-
- </div>
-
-<!-- See the h_search_note_text.html to see the below in action -->
- <!-- <div class="container text-center">
+    <h4>Description</h4>
+    <p>This view allows you to type in search text for a dynamic search using HTMX. The string searched for will look in the Summary and Text fields and return notes that contain the search string without a full page refresh</p>
+    
+     </div>
+ <div class="container text-center">
     <form form hx-target="#results" hx-get="{% url 'h_search_note_tag' %}" hx-trigger="keyup delay:500ms">
     Search Here: {{ form.search_text }}
     </form>
-</div> -->
-<div class="container text-center">
-    <form hx-target="#results" hx-get="{% url 'h_search_note_tag' %}" hx-trigger="change">
-        {% for tag in form.search_tags %}
-            <label class="btn btn-outline-primary"> {{ tag }}</label>
-        {% endfor %}
-    </form>
 </div>
-<br>
-
 <div class="container">
     <div class="row">
+        <!-- See the h_search_note_tag.html to see the below in action -->
         <!-- <div class="col-2">
             <form hx-target="#results" hx-get="{% url 'h_search_note_tag' %}" hx-trigger="change">
                 {% for tag in form.search_tags %}
@@ -45,6 +35,7 @@
         </div>
     </div>
 </div>
+
 
 {% endblock content %}
 

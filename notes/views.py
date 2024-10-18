@@ -115,7 +115,7 @@ def create_tag(request):
 	return render(request, 'notes/create_tag.html', context)
 
 
-def h_search_note(request): 
+def h_search_note_text(request): 
 
 	# Always use GET for search forms
 	form = NoteSearchForm(request.GET or None)
@@ -155,7 +155,7 @@ def h_search_note(request):
 	if request.htmx:
 		return render(request, 'notes\h_partial_search_note.html', context)
 	else:
-		return render(request, 'notes\h_search_note.html', context)
+		return render(request, 'notes\h_search_note_text.html', context)
 
 	
 def h_search_note_tag(request): 

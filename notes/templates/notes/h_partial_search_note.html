@@ -1,15 +1,16 @@
 
-<div class="row column-gap-2 row-gap-2 bg-warning">
+<div class="row column-gap-0 row-gap-2 ">
 {% for note in notes %}
-        <div class="col-4 p-3 testborder">
-            Summary: {{ note.summary }}
+        <div class="col-3 p-2 myborder">
+            <b>Summary: <a href="{% url 'detail_note' note.id %}">{{ note.summary }}</a></b>
             <br> 
-            Text: {{ note.text }}
+            <b>Text:</b> {{ note.text }}
             <br>
-            Date: {{ note.date_created | date:"M j, Y" }}
+            <b>Date:</b> {{ note.date_created | date:"M j, Y" }}
             <br>
+            <b>Tags:</b>
             {% for tag in note.tags.all %}
-                {{ tag }}
+               <em> {{ tag }}</em>
             {% endfor %}
         </div>        
 {% endfor %}  
@@ -19,8 +20,9 @@
     
 <style>
 
-.testborder {
-    border: 2px solid red;
+.myborder {
+    border: 5px solid white; 
+    background-color: lightgrey
 }
 
 </style>
